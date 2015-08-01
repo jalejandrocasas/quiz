@@ -14,7 +14,7 @@ exports.load = function(req, res, next, quizId){
 
 //GET /quizes
 exports.index = function(req, res){
-	
+		
 	var filter = {};
 	if (req.query.search !== undefined) {
 		filter.where = [
@@ -22,10 +22,11 @@ exports.index = function(req, res){
 			req.query.search.split(" ").join("%").toLowerCase() + "%"
 		];
 	}
-	models.Quiz.findAll(filter).then(
-		function(quizes){
-			res.render('quizes/index.ejs', {quizes:quizes});	
-		}
+	models.Quiz.
+		findAll(filter).then(
+			function(quizes){
+				res.render('quizes/index.ejs', {quizes:quizes});	
+			}
 	).catch(function(error){ next(error);});
 };
 
