@@ -33,7 +33,7 @@ router.delete('/quizes/:quizId(\\d+)', quizController.destroy);
 //Página de author
 /*GET author page*/
 router.get('/author', function(req, res) {
-  res.render('author');
+  res.render('author' , {quiz: req.quiz, errors:[]});
 });
 
 module.exports = router;
