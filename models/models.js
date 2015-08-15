@@ -29,22 +29,42 @@ var sequelize = new Sequelize(DB_name, user, pwd,
 //Importar la definición de la tabla Quiz en quiz.js
 var quiz_path = path.join(__dirname, 'quiz');
 var Quiz = sequelize.import(quiz_path);
+
+
+//Importar la definición de la tabla Comment en Comment.js
+var comment_path = path.join(__dirname, 'comment');
+var Comment = sequelize.import(comment_path);
+
+// Importar definicion de la tabla Comment
+var comment_path = path.join(__dirname,'comment');
+var Comment = sequelize.import(comment_path);
+
+
+//Asocianciones entre las tablas Quiz y Comments 1-a-N
+Comment.belongsTo(Quiz);
+Quiz.hasMany(Comment);
+
+//Exportar tablas
 exports.Quiz = Quiz; //Exportar la definición de la tabla Quiz
+exports.Comment = Comment; //Exportar la definición de la tabla Comment
 
 //sequelize.sync() crea e inicializa la tabla de preguntas en la BD
 sequelize.sync().then(function(){
 	//then(..) ejecuta el manejador una vez creada la tabla
 	Quiz.count().then(function(count){
 		if(count === 0){ //si la tabla está vacía se inicializa
-			Quiz.create({	pregunta: 'Capital de Italia',
-						 	respuesta: 'Roma',
-							tema: 'otro'	
-						});
-			Quiz.create({	pregunta: 'Capital de Portugal',
-			 				respuesta: 'Lisboa',
-							tema: 'otro'	
-						})
-			.then(function(){console.log('Base de datos inicializada')});
+			Quiz.bulkCreate([{
+					pregunta: 'Capital de Italia',
+					respuesta: 'Roma',
+					tema: 'otro'
+				}, {
+					pregunta: 'Capital de Portugal',
+					respuesta: 'Lisboa',
+					tema: 'otro'
+				}])
+				.then(function() {
+					console.log('Base de datos inicializada');
+				});
 		};
 	});
 });
