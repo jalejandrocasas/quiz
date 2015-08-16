@@ -25,6 +25,8 @@ header, nav, section, footer{
   text-align: center;
 }
 
+.right {float: right;}
+
 nav span{
   margin: 0px 10px 0px 0px;
 }
