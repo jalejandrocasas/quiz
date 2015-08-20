@@ -32,7 +32,14 @@ app.use(function(req, res, next){
    if (!req.path.match(/\/login|\/logout/)) {
         req.session.redir = req.path;     
    } 
-   //hacer visible req.session en la vitas
+   
+	// logout si no se realiza ninguna solicitud http durante 2 minutos 
+	if(Date.now() - req.session.lastConnection > 120000){
+		delete req.session.user;
+	}
+	req.session.lastConnection = Date.now();
+	
+   //hacer visible req.session en la vistas
    res.locals.session = req.session;
    next();
 });
